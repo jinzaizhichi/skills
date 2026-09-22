@@ -250,6 +250,11 @@ carries its own terms. The grant covers the whole repository, including the repo
 `@markdown-viewer/documd`, `@markdown-viewer/draw-uml` and `@markdown-viewer/drawio2svg` are not part of
 this package and are not covered by the CC-BY-4.0 grant above; installing the skill does not license them.
 
+**Attribution, in practice.** CC-BY-4.0 asks for it when you share the package, and only then. Vendor it and
+keep `LICENSE.md` beside it, or put one credit line in your project's notices — both satisfy it. Writing
+documents *with* the skill, and documents that stay inside your organisation, require nothing at all. Never a
+per-figure credit. Full detail: [`documd-visuals/LICENSE.md`](documd-visuals/LICENSE.md).
+
 **Third-party names** used throughout this package — PlantUML, AWS, Azure, Cisco, ArchiMate, ECharts,
 Vega, AntV and others — are the trademarks of their respective owners, referenced only to describe the
 syntax and icon sets this package documents. No trademark rights are granted.

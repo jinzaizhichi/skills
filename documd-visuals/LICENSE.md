@@ -12,6 +12,24 @@ Names of third-party products and services used in this package (PlantUML, AWS, 
 ArchiMate, ECharts, Vega, AntV and others) are the trademarks of their respective owners, used only to
 describe the syntax and icon sets this package documents.
 
+## How attribution works
+
+CC-BY-4.0 asks for attribution when you **share this package**, and only then. In practice:
+
+- **Vendoring or mirroring the package** — keep this file next to it. That is the whole requirement: the
+  license asks you to *retain* the notices it ships with, not to add new ones.
+- **Shipping it inside a product or pipeline** — one credit line in your project's third-party notices,
+  credits or colophon is enough, and a link to <https://github.com/markdown-viewer/skills> satisfies it.
+- **Writing documents with it** — reading the skill, following it, and having an agent write its own
+  diagrams, charts and layouts is *use*, not sharing. No attribution is required anywhere.
+- **Documents kept inside your organisation** — sharing under CC-BY-4.0 means providing material to the
+  public; internal documents are not covered, so nothing is required.
+- **Embedding an example in a document you publish** — credit the package once in that document's
+  colophon, credits or metadata, not under the figure. Figures rendered by the engines are their output,
+  not part of this package.
+
+No per-figure credit, no source offer, and no license header on your own files is ever required.
+
 The full license text follows.
 
 ---
