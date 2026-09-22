@@ -64,7 +64,8 @@ skills/
 
 The package is self-contained: it never cites `research/` or `scripts/`, and the gate fails the build if
 it does. If you install the package, everything it references is inside it — and every file inside it is
-reachable from `SKILL.md`, which `validate-skills.mjs` enforces.
+reachable from `SKILL.md`, which `validate-skills.mjs` enforces. The one exception is `LICENSE.md`: a legal
+attachment is not routing content, so it ships with the package without being linked from the router.
 
 `research/` and `scripts/` are **not discovered as skills**: the CLI finds a skill by locating a
 `SKILL.md`, and neither directory contains one. Verified — `npx skills add ./skills --list` reports
@@ -239,4 +240,16 @@ Contribute to the single package, not to new engine-named skills:
 
 ## 📄 License
 
-GPL-3.0
+**The skill package (`documd-visuals/`) is [CC-BY-4.0](LICENSE)** — use it, copy it, adapt it and
+redistribute it, including commercially and including the examples, with attribution. The same text ships
+inside the package as [`documd-visuals/LICENSE.md`](documd-visuals/LICENSE.md), so an installed copy
+carries its own terms. The grant covers the whole repository, including the repo-only tooling in
+`scripts/` and the dossiers in `research/` — neither directory is shipped or discovered as a skill.
+
+**The `documd` CLI and the rendering engines are separate works under GPL-3.0-only.**
+`@markdown-viewer/documd`, `@markdown-viewer/draw-uml` and `@markdown-viewer/drawio2svg` are not part of
+this package and are not covered by the CC-BY-4.0 grant above; installing the skill does not license them.
+
+**Third-party names** used throughout this package — PlantUML, AWS, Azure, Cisco, ArchiMate, ECharts,
+Vega, AntV and others — are the trademarks of their respective owners, referenced only to describe the
+syntax and icon sets this package documents. No trademark rights are granted.

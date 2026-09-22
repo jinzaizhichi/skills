@@ -28,6 +28,10 @@ const PKG_DIRS = fs
 
 const ALLOWED_FENCES = ['plantuml', 'puml', 'dot', 'vega', 'vega-lite', 'vegalite', 'echarts', 'infographic'];
 const BANNED_FENCES = ['mermaid', 'mmd', 'canvas', 'drawio'];
+// Legal attachments are not routing content: nothing should send an agent to read the terms, so they are
+// exempt from the reachability rule below. They must still live *inside* the package — the installer
+// copies the package directory only, so a repo-root LICENSE never reaches an installed copy.
+const LEGAL_FILE_RE = /^(LICENSE|COPYING|NOTICE)(\.(md|txt))?$/i;
 const BUDGET = { skill: 300, goal: 200, engine: 300, coverage: 330, example: 120, theme: 400 };
 const EXAMPLE_HARD_LIMIT = 200; // Vega/Vega-Lite specs legitimately run longer than prose-only files
 const BUDGET_BYTES = { skill: 12 * 1024, description: 1024 };
@@ -314,6 +318,7 @@ if (!fs.existsSync(catalogPath)) {
       }
     }
     for (const f of all) {
+      if (LEGAL_FILE_RE.test(path.basename(f))) continue; // LICENSE.md ships unlinked, by design
       if (!seen.has(f)) fail(path.relative(ROOT, f), 'unreachable from SKILL.md — nothing links it, so it is dead weight');
     }
   }

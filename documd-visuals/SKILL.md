@@ -1,5 +1,6 @@
 ---
 name: documd-visuals
+license: CC-BY-4.0
 compatibility: >
   Figures need only the host application that renders the document. Batch conversion to html / epub /
   docx / pdf needs Node 18+ and Chrome/Chromium, via `npx @markdown-viewer/documd`.
