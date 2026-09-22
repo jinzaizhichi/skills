@@ -1,8 +1,12 @@
-# Markdown Viewer Agent Skills
+# docu.md skills
 
-Opinionated skills for AI coding agents to create stunning diagrams and visualizations directly in Markdown. These skills extend agent capabilities across diagram generation, data visualization, and technical documentation.
+Agent skills for the [docu.md](https://docu.md) Markdown pipeline. One skill package, organised by **what
+the reader wants**, with the rendering engines behind it as implementation references.
 
-**14 skills** covering 5 rendering engines — from software modeling to enterprise architecture, data analytics, and editorial-quality content cards.
+**242 verified examples · 183 scenarios · 31 goal domains · 6 engines**, every figure coloured from one of
+**nine themes** defined in `styles/` and generated from a source table, gated by `scripts/check-all.mjs`
+(theme drift · contrast · block render · block coverage · theme usage · structure) plus
+`scripts/verify-examples.mjs` for the full render pass.
 
 Skills follow the [Agent Skills](https://agentskills.io/) format.
 
@@ -10,7 +14,7 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## 🧭 Quick Navigation
 
-**[🚀 Installation](#-installation)** • **[📚 Available Skills](#-available-skills)** • **[📖 Skill Structure](#-skill-structure)** • **[🔗 Links](#-links)**
+**[🚀 Installation](#-installation)** • **[🧩 The Package](#-the-package)** • **[⚙️ Engines](#-engines)** • **[�️ The `documd` CLI](#-the-documd-cli)** • **[�🔀 Migrated Skills](#-migrated-skills)** • **[🔗 Links](#-links)**
 
 ---
 
@@ -22,196 +26,190 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 npx skills add markdown-viewer/skills
 ```
 
-This method works with multiple AI coding agents (Claude Code, Codex, Cursor, etc.)
+This method works with multiple AI coding agents (Claude Code, Codex, Cursor, etc.) and discovers the
+`documd-visuals` package.
 
 ### Manual Installation
 
 **For Claude Code (Manual)**
 ```bash
-cp -r skills/<skill-name> ~/.claude/skills/
+cp -r skills/documd-visuals ~/.claude/skills/
 ```
 
 **For claude.ai**
 
-Add skills to project knowledge or paste SKILL.md contents into the conversation.
+Add the package to project knowledge or paste `SKILL.md` contents into the conversation.
 
 **For GitHub Copilot / VS Code**
 
-Skills are automatically detected when placed in `.github/skills/` directory.
+Packages are automatically detected when placed in `.github/skills/` directory.
 
 ---
 
-## 📚 Available Skills
-
-### Standalone Skills
-
-| Category | Skill | Code Fence | Description | Best For |
-|----------|-------|------------|-------------|----------|
-| � Data Charts | [vega](vega/SKILL.md) | ` ```vega-lite ` / ` ```vega ` | Data-driven charts with Vega-Lite and Vega | Bar, line, scatter, heatmap, area charts, radar, word cloud |
-| 📈 Infographic | [infographic](infographic/SKILL.md) | ` ```infographic ` | 70+ pre-designed templates with YAML syntax | KPI cards, timelines, roadmaps, SWOT, funnels, org trees |
-| 🎨 Mind Map | [canvas](canvas/SKILL.md) | ` ```canvas ` | Spatial node-based diagrams with JSON Canvas format | Mind maps, knowledge graphs, concept maps, planning boards |
-
-### HTML/CSS Embedded Skills
-
-These skills generate HTML/CSS directly embedded in Markdown (no code fence):
-
-| Category | Skill | Templates | Description | Best For |
-|----------|-------|-----------|-------------|----------|
-| 🏛️ Layered Architecture | [architecture](architecture/SKILL.md) | 13 layouts × 12 styles | Color-coded layer diagrams with grid-based component layout | System layers, microservices, enterprise apps |
-| 🃏 Info Cards | [infocard](infocard/SKILL.md) | 13 layouts × 14 styles | Editorial-style information cards with magazine-quality typography | Knowledge summaries, data highlights, event announcements |
-
-### PlantUML-Based Skills
-
-These skills use PlantUML as the diagram engine, with domain-specific mxgraph stencil icons and conventions. All use ` ```plantuml ` or ` ```puml ` code fence.
-
-| Category | Skill | Description | Best For |
-|----------|-------|-------------|----------|
-| 📐 UML Diagrams | [uml](uml/SKILL.md) | 14 UML diagram types with 9500+ mxgraph stencil icons | Software modeling, design patterns, API flows |
-| ☁️ Cloud Architecture | [cloud](cloud/SKILL.md) | AWS, Azure, GCP, Alibaba, IBM, OpenStack, Kubernetes icons | Cloud infrastructure, serverless, multi-cloud |
-| 🌐 Network Topology | [network](network/SKILL.md) | Network diagrams with Cisco/Citrix/industry device icons | LAN/WAN, enterprise networks, data center |
-| 🔒 Security Architecture | [security](security/SKILL.md) | IAM, encryption, firewall, threat detection, compliance icons | Threat models, zero-trust, compliance auditing |
-| 🏢 ArchiMate | [archimate](archimate/SKILL.md) | Enterprise architecture with ArchiMate layered modeling | Business/application/technology layer modeling |
-| 📋 BPMN | [bpmn](bpmn/SKILL.md) | Business process modeling, EIP, and Lean Mapping stencils | Workflow automation, EIP, value stream mapping |
-| 📊 Data Analytics | [data-analytics](data-analytics/SKILL.md) | Data pipeline and analytics workflow diagrams | ETL/ELT pipelines, data warehouses, ML workflows |
-| 📡 IoT | [iot](iot/SKILL.md) | IoT device, sensor, and edge computing diagrams | Smart home/factory, fleet management, digital twins |
-| 🧠 Mind Map | [mindmap](mindmap/SKILL.md) | Native PlantUML mind map syntax with directional branches and rich text | Brainstorming trees, study outlines, decision maps |
-
-### Skill Selection Guide
-
-| Use Case | Recommended Skill | Reason |
-|----------|-------------------|--------|
-| **Software Modeling** | | |
-| Flowchart / process flow | `uml` | PlantUML activity diagram with auto-layout |
-| Sequence diagram | `uml` | UML lifeline and flow shapes |
-| State machine | `uml` | UML statechart notation |
-| Class / object diagram | `uml` | Standard UML notation |
-| Component / deployment | `uml` | UML component and deployment views |
-| Dependency graph / module relations | `uml` | Package diagram with hierarchical layout |
-| **Data Visualization** | | |
-| Bar / line / scatter chart | `vega` | Data-driven visualization |
-| Heatmap / multi-series | `vega` | Statistical analysis |
-| Radar chart / word cloud | `vega` | Advanced Vega syntax |
-| KPI dashboard / metrics | `infographic` | Pre-designed card templates |
-| Timeline / roadmap | `infographic` | Built-in timeline templates |
-| SWOT / comparison | `infographic` | Structured comparison templates |
-| **Content & Presentation** | | |
-| Knowledge summary card | `infocard` | Editorial typography and layout |
-| Data highlight / metrics card | `infocard` | Magazine-quality data presentation |
-| Event announcement | `infocard` | Professional card design |
-| Topic overview | `infocard` | Content-driven tone sensing |
-| **Concept Mapping** | | |
-| Mind map / brainstorm (hierarchical auto-layout) | `mindmap` | PlantUML mind map syntax with automatic tree layout |
-| Mind map / brainstorm (free-position) | `canvas` | Free spatial positioning |
-| Knowledge graph | `canvas` | Node-edge with coordinates |
-| **Architecture** | | |
-| System layers (User→App→Data→Infra) | `architecture` | Color-coded HTML/CSS layer templates |
-| Microservices architecture | `architecture` | Grid-based component layout |
-| Enterprise architecture (ArchiMate) | `archimate` | ArchiMate layered modeling notation |
-| **Network & Cloud** | | |
-| Network topology (LAN/WAN) | `network` | Cisco/Citrix/industry device icons |
-| AWS architecture | `cloud` | AWS stdlib icons |
-| Azure / GCP / Alibaba Cloud | `cloud` | Provider-specific PlantUML stdlib |
-| Kubernetes deployment | `cloud` | K8s-specific icons |
-| **Security** | | |
-| Threat model | `security` | Security-specific icons and patterns |
-| Zero-trust architecture | `security` | IAM, firewall, encryption icons |
-| Compliance diagram | `security` | Audit and compliance flows |
-| **Business Process** | | |
-| BPMN workflow | `bpmn` | BPMN notation with swim lanes |
-| Integration pattern (EIP) | `bpmn` | Enterprise integration patterns |
-| Value stream mapping | `bpmn` | Lean Mapping stencils |
-| **Data Engineering** | | |
-| ETL/ELT pipeline | `data-analytics` | Data pipeline icons and patterns |
-| Data warehouse architecture | `data-analytics` | Warehouse/lake/lakehouse models |
-| ML workflow | `data-analytics` | ML pipeline visualization |
-| **IoT** | | |
-| Sensor network | `iot` | IoT device and sensor icons |
-| Edge computing architecture | `iot` | Edge/cloud integration patterns |
-| Digital twin / fleet management | `iot` | Asset modeling and tracking |
-
----
-
-## 📖 Skill Structure
-
-Each skill contains:
+## 🧩 The Package
 
 ```
 skills/
-├── <skill-name>/
-│   ├── SKILL.md        # Detailed instructions for the agent (with YAML frontmatter)
-│   ├── examples/       # Example diagrams (PlantUML-based skills)
-│   ├── references/     # Syntax specs and examples (canvas, vega, infographic)
-│   ├── layouts/        # Layout templates (architecture, infocard)
-│   └── styles/         # Color style templates (architecture, infocard)
-└── README.md           # This file
+├── documd-visuals/        ← the skill package — the only skill here, and the only thing installed
+│   ├── SKILL.md           ← router: iron rules, 31 goals, capability boundaries
+│   ├── converting.md      ← the documd CLI: install, formats, flags, what survives an export
+│   ├── catalog/           ← every scenario: domain, engines, tier, example files
+│   ├── goals/             ← one guide per goal domain
+│   ├── engines/           ← per-engine reference + coverage/ ledgers (units, then examples by goal)
+│   ├── examples/          ← 242 verified examples, grouped by goal domain
+│   └── styles/            ← palette.md (the contract) + themes/<theme>.md (values + a block per engine)
+├── research/              ← engine dossiers: coverage ledgers + verification notes (repo-only, never shipped)
+└── scripts/               ← repo-level gates (not shipped)
 ```
 
-### Skill Hierarchy
+The package is self-contained: it never cites `research/` or `scripts/`, and the gate fails the build if
+it does. If you install the package, everything it references is inside it — and every file inside it is
+reachable from `SKILL.md`, which `validate-skills.mjs` enforces.
 
-```mermaid
-flowchart TD
-    plantuml["📐 PlantUML<br/><small>Base: text-based diagramming engine</small>"]
-    standalone["🧩 Standalone<br/><small>Independent rendering engines</small>"]
-    htmlcss["🎨 HTML/CSS<br/><small>Direct HTML embedding</small>"]
-    
-    plantuml --> uml["📐 uml<br/><small>14 UML types + 9500 stencils</small>"]
-    plantuml --> cloud["☁️ cloud<br/><small>AWS/Azure/GCP/Alibaba/IBM</small>"]
-    plantuml --> network["🌐 network<br/><small>Cisco/Citrix devices</small>"]
-    plantuml --> security["🔒 security<br/><small>IAM/Firewall/Encryption</small>"]
-    plantuml --> archimate["🏢 archimate<br/><small>Enterprise ArchiMate layers</small>"]
-    plantuml --> bpmn["📋 bpmn<br/><small>BPMN/EIP/Lean Mapping</small>"]
-    plantuml --> dataanalytics["📊 data-analytics<br/><small>ETL/Warehouse/ML</small>"]
-    plantuml --> iot["📡 iot<br/><small>Sensors/Edge/Smart systems</small>"]
-    plantuml --> mindmap["🧠 mindmap<br/><small>Hierarchical brainstorming maps</small>"]
-    
-    standalone --> vega["📊 vega<br/><small>Data-driven charts</small>"]
-    standalone --> infographic["📈 infographic<br/><small>70+ YAML templates</small>"]
-    standalone --> canvas["🎨 canvas<br/><small>JSON Canvas mind maps</small>"]
-    
-    htmlcss --> architecture["🏛️ architecture<br/><small>12 styles × 13 layouts</small>"]
-    htmlcss --> infocard["🃏 infocard<br/><small>14 styles × 13 layouts</small>"]
+`research/` and `scripts/` are **not discovered as skills**: the CLI finds a skill by locating a
+`SKILL.md`, and neither directory contains one. Verified — `npx skills add ./skills --list` reports
+exactly one skill, `documd-visuals`.
+
+### How a request is routed
+
+1. `SKILL.md` matches the reader's intent to one of **31 goal domains**, grouped into four meta-clusters:
+   data & metrics · process & systems · infrastructure & governance · knowledge & expression.
+2. `goals/<domain>.md` lists that domain's scenarios with the example files that implement them.
+3. `engines/<engine>.md` covers the chosen engine's limits and anti-patterns.
+
+### Goal domains
+
+| Meta cluster | Domains |
+|---|---|
+| A — data & metrics | service-reliability · ops-monitoring · delivery-throughput · goal-and-status-reporting · product-metrics · business-reporting · go-to-market · cost-and-budget · data-exploration |
+| B — process & systems | engineering-operations · incident-management · process-and-workflow · software-design · software-behaviour · dependencies-and-relations · system-architecture |
+| C — infrastructure & governance | cloud-architecture · data-platform · network-topology · security-and-compliance · enterprise-architecture · organization-and-roles · people-and-hiring |
+| D — knowledge & expression | knowledge-and-outline · planning-and-roadmap · migration-and-rollout · comparison-and-selection · internal-documents · catalogues-and-inventories · customer-and-partner-comms |
+
+## ⚙️ Engines
+
+**Recommended — write new content with these**
+
+| Fence | Engine | Use it for |
+|---|---|---|
+| `plantuml` / `puml` | draw-uml 1.5.2 → drawio2svg | UML, ArchiMate, BPMN, process, cloud/network/security architecture, 9,514 stencil icons |
+| `dot` | @viz-js/viz 3.30.0 (Graphviz) | dependency, causality and hierarchy graphs with computed layout |
+| `vega` / `vega-lite` | vega 6.4.0 / vega-lite 6.4.3 | charts that need data transforms, faceting, statistics |
+| `echarts` | echarts 6.1.0 | report-grade charts, dashboards, gauges, annotations |
+| `infographic` | @antv/infographic 0.2.20 | template-driven infographics: roadmaps, sequences, comparisons |
+| (bare HTML) | built in | system architecture diagrams, cards, memos and page-level layouts |
+
+**Not recommended** — `mermaid` · `canvas` · `drawio` (the last is the internal format of the PlantUML
+pipeline: machine output, not a writing target). The package does not document them; new content uses the
+engines above.
+
+## 🛠️ The `documd` CLI
+
+This package draws figures. The **`documd` CLI** is the other half of the pipeline: it renders a whole
+Markdown document to a finished file, and a diagram source to an image. It is documented inside the
+package — `documd-visuals/converting.md`, linked from `SKILL.md` — so an agent that installs the skill
+knows the export path exists.
+
+**Installing the skill does not install the CLI, and the installer cannot be made to.** `npx skills add`
+copies or symlinks files into an agent's skills directory; the Agent Skills format has no install-hook
+field, and the CLI runs no scripts of its own during `add`. There is no point at which a skill package
+could trigger `npm install`. Treat the CLI as a separate tool that the skill points at.
+
+Nothing has to be installed to use it:
+
+```bash
+npx @markdown-viewer/documd report.md report.docx                 # also .pdf .epub .html
+npx @markdown-viewer/documd architecture.puml architecture.svg    # also .png .drawio
 ```
 
-### SKILL.md Format
+Install it once if the same command runs repeatedly — this provides the `documd` binary:
 
-Each `SKILL.md` includes:
-- **YAML frontmatter** with `name`, `description`, and `metadata` fields
-- **Critical Syntax Rules** to avoid common errors
-- **Templates / Examples** for reference
-- **Common Pitfalls** and solutions
+```bash
+npm install -g @markdown-viewer/documd
+```
+
+> ⚠️ **Use the scope.** The bare name `documd` on npm is an unrelated package ("markdown object
+> notation"). `npx documd` fetches that one, not this CLI. Always write `@markdown-viewer/documd`.
+
+The npm release carries the same version as the extension, so a `npx` run is the build documented here.
+
+## 🔀 Migrated Skills
+
+This repository used to ship 14 engine- and domain-named skills. They are now one package, and their content
+was **rewritten, not copied**:
+
+| Old skill | New home |
+|---|---|
+| `uml` | `engines/plantuml.md`, `engines/plantuml-stencils/`, `examples/software-design/`, `examples/software-behaviour/` |
+| `cloud` · `network` · `security` · `iot` · `data-analytics` | `examples/cloud-architecture/`, `network-topology/`, `security-and-compliance/`, `data-platform/` |
+| `archimate` · `bpmn` · `mindmap` | `examples/enterprise-architecture/`, `process-and-workflow/`, `knowledge-and-outline/` |
+| `vega` · `graphviz` · `infographic` | `engines/vega.md`, `engines/dot.md`, `engines/infographic.md` |
+| `architecture` · `infocard` | `engines/html-css.md` (rules, the seven architecture shapes, page skeletons, connectors); the layout set was recovered into `examples/system-architecture/`, and the card prototypes became `examples/internal-documents/`, `catalogues-and-inventories/`, `customer-and-partner-comms/`; the rest of the 90-file design library was triaged out |
+| `canvas` (removed) | dropped, not migrated — a spatial whiteboard format has no target engine |
+
+There are no compatibility stubs: the CLI discovers a skill by locating a `SKILL.md`, so a stub directory
+would be ignored rather than installed — and would only add a dead directory to the repository. Reinstall
+to get the new package.
 
 ---
 
-## 🎯 Usage Tips
+## 📖 Package Development
 
-### For AI Agents
+### Gates
 
-When the agent receives a request involving diagrams or visualizations:
+```bash
+node scripts/check-all.mjs                                           # every theme gate at once
+node scripts/validate-skills.mjs                                     # layout, budgets, catalog, fences, language, theme reachability
+node scripts/build-themes.mjs --check                                 # theme files match the source tables
+node scripts/build-catalog.mjs --check                               # catalog ↔ filesystem consistency
+node scripts/build-goals.mjs --check                                  # goal docs match the catalog
+node scripts/sync-engine-indexes.mjs --check                          # shipped template index matches the installed engine
+node scripts/build-coverage.mjs --check                               # coverage ledgers match the catalog
+node scripts/verify-examples.mjs --dir documd-visuals/examples --all  # render every example
+```
 
-1. **Identify the diagram type** from user requirements
-2. **Read the appropriate SKILL.md** for detailed instructions
-3. **Follow the syntax rules** carefully to avoid render failures
-4. **Use the code fence** specified in each skill
+`check-all.mjs` runs the theme gates — drift (`build-themes.mjs --check`), contrast
+(`check-palette-contrast.mjs`, per theme), block render (`verify-blocks.mjs`), block coverage
+(`apply-block.mjs --all --check`), off-theme literals (`check-palette-usage.mjs --strict`) — and
+`validate-skills.mjs`, which also enforces that `styles/palette.md` and every `styles/themes/*.md`
+stay reachable from `SKILL.md`, the goal docs and the engine references; add `--with-examples` for
+the full render pass. All must exit 0.
+`build-themes.mjs` regenerates `documd-visuals/styles/themes/*.md` from `scripts/themes.json` —
+**edit the JSON, not the generated theme files**.
+`build-catalog.mjs` and `build-goals.mjs` regenerate
+`documd-visuals/catalog/scenarios.{json,md}` and `documd-visuals/goals/*.md` from
+`documd-visuals/catalog/scenarios.tsv` — **edit the TSV, not the generated files**.
 
-### Code Fence Reference
+### Budgets
 
-| Skill | Code Fence | Output Format |
-|-------|------------|---------------|
-| Vega-Lite | ` ```vega-lite ` | SVG/Canvas |
-| Vega | ` ```vega ` | SVG/Canvas |
-| Infographic | ` ```infographic ` | HTML |
-| Canvas | ` ```canvas ` | SVG |
-| UML | ` ```plantuml ` / ` ```puml ` | SVG |
-| Cloud | ` ```plantuml ` / ` ```puml ` | SVG |
-| Network | ` ```plantuml ` / ` ```puml ` | SVG |
-| Security | ` ```plantuml ` / ` ```puml ` | SVG |
-| ArchiMate | ` ```plantuml ` / ` ```puml ` | SVG |
-| BPMN | ` ```plantuml ` / ` ```puml ` | SVG |
-| Data Analytics | ` ```plantuml ` / ` ```puml ` | SVG |
-| IoT | ` ```plantuml ` / ` ```puml ` | SVG |
-| Mindmap | ` ```plantuml ` / ` ```puml ` | SVG |
-| Architecture | (no fence, raw HTML) | HTML |
-| Infocard | (no fence, raw HTML) | HTML |
+| File | Budget |
+|---|---|
+| `documd-visuals/SKILL.md` | 300 lines / 12 KB body (frontmatter description: 1024 characters — the Agent Skills limit) |
+| `goals/*.md` | 200 lines |
+| `engines/*.md` | 300 lines (generated `plantuml-stencils/` exempt) |
+| `examples/**/*.md` | 120 lines target, 200 hard limit (verbose Vega specs) |
+| `engines/coverage/*.md` | 330 lines (generated: curated unit tables + every example grouped by goal) |
+
+### Adding an example
+
+1. Write `documd-visuals/examples/<domain>/<scenario>.md` in the standard shape:
+   *Best for / Avoid when / Answers* → the fenced block → *Data Shape / Key Options / Pitfalls /
+   Alternatives* → a `<!-- source: … -->` line.
+2. Add a row to `catalog/scenarios.tsv`: `domain <TAB> scenario <TAB> engine <TAB> file`.
+3. `node scripts/build-catalog.mjs --apply && node scripts/build-goals.mjs`.
+4. `node scripts/verify-examples.mjs --dir documd-visuals/examples --all`.
+
+### Code fence reference
+
+| Engine | Fence | Output |
+|---|---|---|
+| PlantUML (draw-uml) | ` ```plantuml ` / ` ```puml ` | SVG |
+| Graphviz | ` ```dot ` | SVG |
+| Vega-Lite / Vega | ` ```vega-lite ` / ` ```vega ` | PNG |
+| ECharts | ` ```echarts ` | PNG |
+| Infographic | ` ```infographic ` | PNG |
+| HTML/CSS | (no fence, raw HTML) | HTML |
+| ~~Mermaid~~ · ~~Canvas~~ · ~~drawio~~ | not recommended | — |
 
 ---
 
@@ -229,20 +227,13 @@ When the agent receives a request involving diagrams or visualizations:
 
 ## 🤝 Contributing
 
-To add a new skill:
+Contribute to the single package, not to new engine-named skills:
 
-1. Create a new folder under `skills/` with your skill name
-2. Add a `SKILL.md` file following the standard format:
-   ```yaml
-   ---
-   name: your-skill-name
-   description: Brief description of the skill
-   metadata:
-     author: Your attribution text
-   ---
-   ```
-3. Include examples/references in a subfolder
-4. Update this README to include your skill in the tables
+1. Find the goal domain your example belongs to in `documd-visuals/catalog/scenarios.tsv` (or open
+   `SKILL.md` to see the router). If no domain fits, propose one — domains hold 3–8 scenarios.
+2. Write the example and register it in the TSV (see *Adding an example* above).
+3. Run all four gates; a failing render or a stale catalog blocks the change.
+4. Keep statements traceable: every example ends with `<!-- source: … -->` pointing at the engine docs.
 
 ---
 
