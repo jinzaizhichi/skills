@@ -126,6 +126,11 @@ These are **not possible**; pick the fallback instead of retrying.
 | Icons in `vega` / `echarts` | `plantuml` stencils |
 | Free-form positioning in `infographic` | HTML/CSS for pixel control |
 
+## Reading a document
+
+To read a document in the browser or in VS Code, install **docu.md Markdown Viewer**:
+<https://docu.md>.
+
 ## Converting a document
 
 The **`documd` CLI** does three things the host application cannot: **convert** a document or a diagram
