@@ -84,7 +84,7 @@ const NOTES = {
     anti: ['A sequence diagram with no error path', 'Deployment topology drawn without units or scaling facts'],
   },
   'dependencies-and-relations': {
-    order: 'Graphviz for computed layouts and rank control, force/arc layouts for topology shape, matrices when the graph is dense.',
+    order: 'Rectangle graphs for computed layouts and rank control, force/arc layouts for topology shape, matrices when the graph is dense.',
     anti: ['A 40-node hairball → aggregate or filter first', 'Reading link length in a force layout as a measurement'],
   },
   'cloud-architecture': {
@@ -155,7 +155,6 @@ const NOTES = {
 
 const ENGINE_LINE = {
   plantuml: '`plantuml` — diagrams with icon families and UML/ArchiMate/BPMN semantics',
-  dot: '`dot` — computed layouts for dependency, causality and hierarchy graphs',
   vega: '`vega` / `vega-lite` — statistical views where the data needs transforms',
   echarts: '`echarts` — report-grade charts and dashboards',
   infographic: '`infographic` — template-driven boards, sequences and comparisons',

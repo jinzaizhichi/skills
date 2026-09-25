@@ -26,8 +26,9 @@ const PKG_DIRS = fs
   .filter((d) => d.isDirectory() && !['.git', 'node_modules', 'scripts', 'research'].includes(d.name))
   .map((d) => d.name);
 
-const ALLOWED_FENCES = ['plantuml', 'puml', 'dot', 'vega', 'vega-lite', 'vegalite', 'echarts', 'infographic'];
-const BANNED_FENCES = ['mermaid', 'mmd', 'canvas', 'drawio'];
+const ALLOWED_FENCES = ['plantuml', 'puml', 'vega', 'vega-lite', 'vegalite', 'echarts', 'infographic'];
+// There is deliberately no banned-fence list: anything outside ALLOWED_FENCES is already rejected
+// below, so a second list could only drift away from the first.
 // Legal attachments are not routing content: nothing should send an agent to read the terms, so they are
 // exempt from the reachability rule below. They must still live *inside* the package — the installer
 // copies the package directory only, so a repo-root LICENSE never reaches an installed copy.
@@ -81,7 +82,6 @@ const collect = (dir) => {
 };
 collect(PKG);
 
-const bannedRe = new RegExp('^```(' + BANNED_FENCES.join('|') + ')\\b', 'm');
 const anyFenceRe = /^```([a-z0-9-]+)\b/gm;
 
 let exampleCount = 0;
@@ -91,9 +91,6 @@ for (const f of mdFiles) {
   const lines = text.split('\n');
   const isExample = rel.startsWith(`${pkg}/examples/`);
 
-  if (isExample && bannedRe.test(text)) {
-    fail(rel, `uses a non-recommended fence (${BANNED_FENCES.join(' / ')})`);
-  }
   if (isExample && /^```html\b/m.test(text)) {
     fail(rel, 'uses a ```html block — cards must be bare HTML');
   }

@@ -3,7 +3,7 @@
 Agent skills for the [docu.md](https://docu.md) Markdown pipeline. One skill package, organised by **what
 the reader wants**, with the rendering engines behind it as implementation references.
 
-**242 verified examples · 183 scenarios · 31 goal domains · 6 engines**, every figure coloured from one of
+**242 verified examples · 183 scenarios · 31 goal domains · 5 engines**, every figure coloured from one of
 **nine themes** defined in `styles/` and generated from a source table, gated by `scripts/check-all.mjs`
 (theme drift · contrast · block render · block coverage · theme usage · structure) plus
 `scripts/verify-examples.mjs` for the full render pass.
@@ -93,16 +93,15 @@ exactly one skill, `documd-visuals`.
 
 | Fence | Engine | Use it for |
 |---|---|---|
-| `plantuml` / `puml` | draw-uml 1.5.2 → drawio2svg | UML, ArchiMate, BPMN, process, cloud/network/security architecture, 9,514 stencil icons |
-| `dot` | @viz-js/viz 3.30.0 (Graphviz) | dependency, causality and hierarchy graphs with computed layout |
+| `plantuml` / `puml` | draw-uml 1.5.2 → drawio2svg | UML, ArchiMate, BPMN, process, cloud/network/security architecture, dependency graphs, 9,514 stencil icons |
 | `vega` / `vega-lite` | vega 6.4.0 / vega-lite 6.4.3 | charts that need data transforms, faceting, statistics |
 | `echarts` | echarts 6.1.0 | report-grade charts, dashboards, gauges, annotations |
 | `infographic` | @antv/infographic 0.2.20 | template-driven infographics: roadmaps, sequences, comparisons |
 | (bare HTML) | built in | system architecture diagrams, cards, memos and page-level layouts |
 
-**Not recommended** — `mermaid` · `canvas` · `drawio` (the last is the internal format of the PlantUML
-pipeline: machine output, not a writing target). The package does not document them; new content uses the
-engines above.
+**Anything else is not recommended.** The package documents no other engine, and new content uses the
+five above; the one place the excluded names are listed is the `SKILL.md` description, so an agent
+recognises them when a user asks for one and can say no.
 
 ## 🛠️ The `documd` CLI
 
@@ -120,7 +119,7 @@ Nothing has to be installed to use it:
 
 ```bash
 npx @markdown-viewer/documd report.md report.docx                 # also .pdf .epub .html
-npx @markdown-viewer/documd architecture.puml architecture.svg    # also .png .drawio
+npx @markdown-viewer/documd architecture.puml architecture.svg    # also .png
 ```
 
 Install it once if the same command runs repeatedly — this provides the `documd` binary:
@@ -144,9 +143,8 @@ was **rewritten, not copied**:
 | `uml` | `engines/plantuml.md`, `engines/plantuml-stencils/`, `examples/software-design/`, `examples/software-behaviour/` |
 | `cloud` · `network` · `security` · `iot` · `data-analytics` | `examples/cloud-architecture/`, `network-topology/`, `security-and-compliance/`, `data-platform/` |
 | `archimate` · `bpmn` · `mindmap` | `examples/enterprise-architecture/`, `process-and-workflow/`, `knowledge-and-outline/` |
-| `vega` · `graphviz` · `infographic` | `engines/vega.md`, `engines/dot.md`, `engines/infographic.md` |
+| `vega` · `graphviz` · `infographic` | `engines/vega.md`, `engines/infographic.md` — the graph examples were re-authored as `plantuml` rectangles |
 | `architecture` · `infocard` | `engines/html-css.md` (rules, the seven architecture shapes, page skeletons, connectors); the layout set was recovered into `examples/system-architecture/`, and the card prototypes became `examples/internal-documents/`, `catalogues-and-inventories/`, `customer-and-partner-comms/`; the rest of the 90-file design library was triaged out |
-| `canvas` (removed) | dropped, not migrated — a spatial whiteboard format has no target engine |
 
 There are no compatibility stubs: the CLI discovers a skill by locating a `SKILL.md`, so a stub directory
 would be ignored rather than installed — and would only add a dead directory to the repository. Reinstall
@@ -205,12 +203,10 @@ the full render pass. All must exit 0.
 | Engine | Fence | Output |
 |---|---|---|
 | PlantUML (draw-uml) | ` ```plantuml ` / ` ```puml ` | SVG |
-| Graphviz | ` ```dot ` | SVG |
 | Vega-Lite / Vega | ` ```vega-lite ` / ` ```vega ` | PNG |
 | ECharts | ` ```echarts ` | PNG |
 | Infographic | ` ```infographic ` | PNG |
 | HTML/CSS | (no fence, raw HTML) | HTML |
-| ~~Mermaid~~ · ~~Canvas~~ · ~~drawio~~ | not recommended | — |
 
 ---
 

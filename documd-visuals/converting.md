@@ -39,13 +39,13 @@ The second positional argument is the output file; the format is inferred from i
 |---|---|---|
 | `.md` · `.markdown` · `.mdown` · `.mkd` · `.txt` | `html` · `epub` · `docx` · `pdf` | Renders the whole document, figures included |
 | `SUMMARY.md` with `--book` | `html` · `epub` · `docx` · `pdf` | Whole-book export, following the GitBook summary |
-| `.puml` · `.mmd` · `.dot` · `.gv` · `.vl` · `.vega` · `.json` … | `svg` · `png` · `drawio` | Renders one diagram source; `--diagram-type` overrides the inferred engine |
+| `.puml` · `.vl` · `.vega` · `.json` … | `svg` · `png` | Renders one diagram source; `--diagram-type` overrides the inferred engine |
 
 ## Flags worth knowing
 
 | Flag | Effect |
 |---|---|
-| `--format <f>` | `html` · `epub` · `docx` · `pdf` · `svg` · `png` · `drawio` — inferred from the output extension when omitted. With `--assets`: `png` or `svg`, the figure's format |
+| `--format <f>` | `html` · `epub` · `docx` · `pdf` · `svg` · `png` — inferred from the output extension when omitted. With `--assets`: `png` or `svg`, the figure's format |
 | `-b, --book` | Treat the input as a GitBook `SUMMARY.md` and export the whole book |
 | `--assets <dir>` | Export the document's figures and images into `<dir>` instead of a document — see [Exporting the figures](#exporting-the-figures) |
 | `--kind <k>` | With `--assets`: `all` (default) · `diagrams` · `images` |
@@ -76,7 +76,7 @@ survives as *content*:
 
 | Element | In `html` / `epub` | In `docx` / `pdf` |
 |---|---|---|
-| Diagram engines (`plantuml` · `dot` · `vega` · `echarts` · `infographic`) | an `<img>` with the rendered figure | a rasterised image |
+| Diagram engines (`plantuml` · `vega` · `echarts` · `infographic`) | an `<img>` with the rendered figure | a rasterised image |
 | Bare-HTML cards and architecture diagrams | live markup | **rasterised** — one image, class names and text gone |
 | Markdown tables | a table | a table, reflowed to the page |
 | Prose | reflowable text | reflowable text |
@@ -119,7 +119,7 @@ Markdown (not a diagram source), there is no output-file argument, `--book` is n
 `--format` picks the figure payload rather than the document format — `png` (the pixels the page shows,
 the default) or `svg`.
 
-> ⚠️ **`--format svg` is not vector for every engine.** `plantuml` · `dot` · `vega` · `echarts` ·
+> ⚠️ **`--format svg` is not vector for every engine.** `plantuml` · `vega` · `echarts` ·
 > `infographic` return a clean SVG with a correct `viewBox`. A **bare-HTML figure** returns the
 > rasteriser's internal vehicle instead — a fixed 14000×14000 canvas, the content at
 > `transform: scale(4)`, and the `outline: 1px solid #ff0000` that the PNG path uses as a crop marker —

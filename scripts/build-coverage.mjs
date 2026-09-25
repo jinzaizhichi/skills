@@ -43,7 +43,6 @@ const ENGINES = {
     file: 'plantuml.md',
     runtime: () => `\`@markdown-viewer/draw-uml\` ${installedVersion('@markdown-viewer/draw-uml')} → \`@markdown-viewer/drawio2svg\` ${installedVersion('@markdown-viewer/drawio2svg')}`,
   },
-  dot: { file: 'dot.md', runtime: () => `\`@viz-js/viz\` ${installedVersion('@viz-js/viz')} (WASM, bundles Graphviz)` },
   vega: { file: 'vega.md', runtime: () => `vega ${installedVersion('vega')} + vega-lite ${installedVersion('vega-lite')}` },
   echarts: { file: 'echarts.md', runtime: () => `echarts ${installedVersion('echarts')} (full package, no \`echarts-gl\`)` },
   infographic: { file: 'infographic.md', runtime: () => `\`@antv/infographic\` ${installedVersion('@antv/infographic')}` },

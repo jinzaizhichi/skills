@@ -80,7 +80,7 @@ OpenIconic icons · Sprite icons
 |---|---|---|
 | Archimate | **L1** | `archimate-diagram/` **11** + `parsers/archimate-macros.ts` |
 | MindMap | **L1** | `mindmap-diagram/` **27**（`@startmindmap`） |
-| WBS | **L2** | ⚠️ `@startwbs` **能解析但渲染为空图**（实测：`documd wbs.puml` → 342 B 空 SVG）；draw-uml 自带 fixture 也证明：`fixtures/svg-generated/creole/036.svg` = 342 B vs 官方基线 `fixtures/svg/creole/036.svg` = 4535 B。**替代**：mindmap 或 dot |
+| WBS | **L2** | ⚠️ `@startwbs` **能解析但渲染为空图**（实测：`documd wbs.puml` → 342 B 空 SVG）；draw-uml 自带 fixture 也证明：`fixtures/svg-generated/creole/036.svg` = 342 B vs 官方基线 `fixtures/svg/creole/036.svg` = 4535 B。**替代**：mindmap 或矩形树 |
 | Gantt | **L1** | `gantt-diagram/` **111**（本仓库最大语料） + `gantt-layout.ts` |
 | packetdiag | **L1** | `packetdiag-diagram/` **16** + `packetdiag-layout` |
 | **ER（Chen 记法）/ IE** | **L1** | `ie-diagram/` **6**：`Entity01 }\|..\|\| Entity02` 式鸦脚关系（有生成 SVG）（**推翻上一轮的 ❌**） |
@@ -111,7 +111,7 @@ OpenIconic icons · Sprite icons
 |---|---|---|
 | `!pragma layout elk`（**默认**） | `elkLayout()`（elkjs） | 默认路径；复杂层次图（activity / state） |
 | `!pragma layout vizjs` | `dotLayout()`（viz.js/WASM） | 需要 Graphviz 行为时 |
-| `!pragma layout smetana` | `dotLayout()`（viz.js） | 语义上映射到 dot 路径 |
+| `!pragma layout smetana` | `dotLayout()`（viz.js） | 语义上映射到 vizjs 路径 |
 
 **序列图固定网格布局**，不受 pragma 影响。默认引擎口径两处表述不一致（npm README 写 "elk (default)"，
 layout-fixtures README 把 `smetana` 列为默认）→ §6 工单 3 实测。
@@ -178,7 +178,7 @@ SysML · UML 2.5 · Veeam · Veeam2 · VVD · Webicons · Weblogos
    日后若取得指南再逐条复核。
 2. **⏳ 项实测**：hyperlinks/tooltips · OpenIconic/Sprite · `@startwbs` 与 mindmap 的差异边界 ·
    IE 鸦脚语法的可表达范围（能否带属性/多关系）。
-3. **默认布局引擎口径**：实测无 pragma 时的真实默认（elk vs dot），写进 `engines/plantuml.md`。
+3. **默认布局引擎口径**：实测无 pragma 时的真实默认（elk vs vizjs），写进 `engines/plantuml.md`。
 4. **示例种子复用**：`fixtures/plantuml/mxgraph/` 的 10 个真实场景 + `stdlib/{aws,c4}`（38 / 8 用例）
    直接对应目标域（云 / 网络 / 安全 / 集成 / 引擎架构 / 精益），作为示例编写起点（改写为文档内嵌代码块 + 加 `source:`）。
 5. **stencil 计数**：新布局下落定 `engines/plantuml-stencils/` 输出路径后重新生成，锁定 9514 口径。

@@ -14,13 +14,13 @@
  * which changes both the inserted values and the block the corpus is matched against.
  *
  * Placement is per engine because a block is not always a prefix: `infographic` wants it after the
- * template line, `plantuml` after `@startuml`, `dot` inside the graph braces, and the JSON engines
+ * template line, `plantuml` after `@startuml`, and the JSON engines
  * want one property added to the spec — or, for `vega`, one scale pushed into `scales`.
  *
  * `--apply` also **upgrades** a block that is present but stale (a theme value changed, or the block
  * gained a line): the run the block occupies is replaced, never duplicated beside. Without that,
- * every theme change would leave the corpus silently on the old values — for `plantuml` and `dot`
- * the later statement wins, so the figure would keep the old colour while the file looked themed.
+ * every theme change would leave the corpus silently on the old values — for `plantuml` the later
+ * statement wins, so the figure would keep the old colour while the file looked themed.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -84,12 +84,6 @@ const ENGINES = {
       if (ENGINES.plantuml.nonUml.test(lines[0].trim())) return -2;
       return lines.findIndex((l) => /^@(start|begin)uml/.test(l.trim())) + 1 || -1;
     },
-  },
-  dot: {
-    fences: ['dot'],
-    variants: ['attributes'],
-    indent: '  ',
-    place: (lines) => lines.findIndex((l) => /^\s*(strict\s+)?(di)?graph\b[^{]*\{\s*$/.test(l)) + 1 || -1,
   },
   echarts: {
     fences: ['echarts'],
@@ -237,8 +231,8 @@ function walk(dir, out = []) {
 /**
  * Does `body` carry `block`?
  *
- * Compared line by line, with indentation and trailing commas removed — the same block is indented
- * for `dot` and gains a trailing comma once it sits inside a JSON spec — and blank lines ignored,
+ * Compared line by line, with indentation and trailing commas removed — the same block gains a
+ * trailing comma once it sits inside a JSON spec — and blank lines ignored,
  * because an example may separate the block from its neighbours differently.
  *
  * A *signature line* was the first implementation, and it stopped being sound the moment PlantUML
@@ -263,7 +257,6 @@ function hasBlock(body, block) {
 function keyOf(engine, line) {
   const l = line.trim().replace(/,$/, '');
   if (engine === 'plantuml') return (l.match(/^skinparam\s+(\S+)/i)?.[1] ?? l).toLowerCase();
-  if (engine === 'dot') return l.replace(/"[^"]*"/g, '""').toLowerCase();
   if (engine === 'infographic') {
     // Palette entries are positional; the line is pasted *after* the `infographic <template>` line, so
     // absolute line numbers are no use. They all share one key, and the region walk keeps them
@@ -355,7 +348,7 @@ function run(engineName) {
       }
       // The block is not fully present. It may still be *partly* present — a theme value changed, or
       // the block gained a line — and then the run it occupies is **replaced**. Inserting beside it
-      // would leave the stale copy in force: for `plantuml` and `dot` the later statement wins, so the
+      // would leave the stale copy in force: for `plantuml` the later statement wins, so the
       // figure would keep the old colour while the file looked themed; for the JSON engines it would
       // duplicate the property.
       const region = blockRegion(engineName, lines, blockKeys);

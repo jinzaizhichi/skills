@@ -75,7 +75,7 @@ const parseMode =
   （⚠️ 自述**未列** Component 与 IE —— 但 fixture 语料证明两者都能渲染 ⇒ **自述落后于实现**，
   这本身就是一条要写进 dossier 的发现）。
 - 解析器补充（源码清单）：`mindmap` · `gantt` · `packetdiag` · `archimate-macros` · `c4-macros` · `awslib-macros`。
-- 布局：`ELK`（elkjs）/ `DOT`（viz.js）；`!pragma layout elk|vizjs` 逐图覆盖；**序列图固定网格布局**。
+- 布局：`ELK`（elkjs）/ `vizjs`（`!pragma layout vizjs`）；逐图覆盖；**序列图固定网格布局**。
 - 图标：**5,000+（本仓库清单 9514 / 60 族）mxgraph 图标**，语法 `mxgraph.<family>.<icon> "Label" as <alias>`，
   可嵌套进 `cloud` / `node` / `rectangle` / `database` / `package` / `frame`，也可作为 activity 的 action 节点。
 - 样式后缀：`#fill` / `##stroke` / `#fill ##stroke` / `##[dashed]green` / 细粒度 `#pink;line:red;line.bold;text:blue`。
@@ -136,8 +136,8 @@ end note
    **L2 静默失败**的是 Timing 与 Salt（能解析、不画图）；其余（JSON / YAML / EBNF / Regex / nwdiag / SDL /
    Ditaa / Chronology / Math / Chart / Files tree）为 L3 不支持。
 2. **差异化在图标与容器**：mxgraph stencil（60 族 / 9514 图标）+ 嵌套容器 + 内联样式，是本引擎相对
-   dot / vega / echarts 的独占能力，也是示例库最该覆盖的部分。
-3. **布局可控但要慎写**：默认 ELK；只有明确需要 DOT 的分层控制时才写 `!pragma layout vizjs`。
+   vega / echarts 的独占能力，也是示例库最该覆盖的部分。
+3. **布局可控但要慎写**：默认 ELK；只有明确需要分层控制时才写 `!pragma layout vizjs`。
 4. **序列图布局是固定网格**：不要指望通过布局 pragma 改变时序图的排布。
 5. **复用现成语料与门禁**：`fixtures/plantuml/mxgraph/` 的 10 个真实场景是示例的现成种子；
    `scripts/validate-skill-icons.mjs` 是现成的"skill 里图标写错"门禁。
@@ -147,5 +147,5 @@ end note
 - [ ] 语言指南来源（阻断问题）—— 暂以 OMG UML 语义 + fixture 语料合成
 - [ ] hyperlinks/tooltips · OpenIconic/Sprite 的实渲染结果
 - [ ] `@startwbs` 与 mindmap 的差异边界；IE 鸦脚语法的可表达范围
-- [ ] 无 pragma 时默认布局引擎（elk vs dot）
+- [ ] 无 pragma 时默认布局引擎（elk vs vizjs）
 - [ ] stencil 数量口径（9514）在新布局下重新生成后复核

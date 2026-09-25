@@ -14,7 +14,7 @@ description: >
   paths); infrastructure (cloud, Kubernetes, ETL, network, security, IAM, compliance); governance and people
   (ArchiMate, org chart, hiring); knowledge and planning (mind map, roadmap, Gantt, migration); documents
   (comparison, SWOT, memo, policy, catalogue, case study). Use when a document needs a diagram, chart or
-  card. Not for slide decks or math notation, or for mermaid / canvas / drawio.
+  card. Not for slide decks or math notation. Not recommended: mermaid / canvas / drawio / dot.
 ---
 
 # documd visuals
@@ -23,10 +23,10 @@ Routing for every diagram, chart, card and layout this document pipeline can ren
 
 ## Iron rules
 
-1. **Allowed fences** — `plantuml` / `puml` · `dot` · `vega` · `vega-lite` · `echarts` · `infographic`,
+1. **Allowed fences** — `plantuml` / `puml` · `vega` · `vega-lite` · `echarts` · `infographic`,
    plus **bare HTML** — which is how system architecture diagrams, cards and page layouts are drawn.
-2. **Not recommended: `mermaid` · `canvas` · `drawio`.** Never write new content in them — use the
-   engines above.
+2. **Nothing outside that list.** A fence the list does not name is a bug, not a lesser option —
+   there is no second-tier engine to fall back to.
 3. **One diagram per fence.** Do not put two engines in one block, and never nest fences.
 4. **HTML is bare, never ` ```html `** — a fenced block becomes an image. Start from a real file rather
    than inventing one: [`layered-with-wings.md`](examples/system-architecture/layered-with-wings.md) for a
@@ -68,7 +68,7 @@ examples are authoritative.
 | process-and-workflow | approval · workflow · swimlane · SOP · process map · BPMN · gate · procurement | plantuml infographic | [goals/process-and-workflow.md](goals/process-and-workflow.md) |
 | software-design | class · domain model · component · package · layering · use case · object · C4 container · SysML | plantuml | [goals/software-design.md](goals/software-design.md) |
 | software-behaviour | state machine · lifecycle · sequence · interaction · messaging · event flow · EIP · deployment | plantuml | [goals/software-behaviour.md](goals/software-behaviour.md) |
-| dependencies-and-relations | dependency · call graph · impact analysis · coupling · ownership · causality · fishbone | dot vega echarts infographic | [goals/dependencies-and-relations.md](goals/dependencies-and-relations.md) |
+| dependencies-and-relations | dependency · call graph · impact analysis · coupling · ownership · causality · fishbone | plantuml vega echarts infographic | [goals/dependencies-and-relations.md](goals/dependencies-and-relations.md) |
 | system-architecture | system architecture · layer stack · zones · pipeline stages · service catalog · request path · connectors | html-css | [goals/system-architecture.md](goals/system-architecture.md) |
 
 ### C — infrastructure & governance
@@ -77,7 +77,7 @@ examples are authoritative.
 |---|---|---|---|
 | cloud-architecture | AWS · Azure · Kubernetes · container · serverless · IoT · edge · VPC · observability | plantuml infographic | [goals/cloud-architecture.md](goals/cloud-architecture.md) |
 | data-platform | ETL · lakehouse · warehouse · CDC · streaming · ingestion · catalog · ML pipeline · ER model | plantuml | [goals/data-platform.md](goals/data-platform.md) |
-| network-topology | network · topology · DMZ · wireless · firewall · switch · packet · route · traffic | plantuml dot echarts | [goals/network-topology.md](goals/network-topology.md) |
+| network-topology | network · topology · DMZ · wireless · firewall · switch · packet · route · traffic | plantuml echarts | [goals/network-topology.md](goals/network-topology.md) |
 | security-and-compliance | zero trust · IAM · encryption · threat model · trust boundary · controls · evidence · audit · compliance · risk | plantuml infographic html-css | [goals/security-and-compliance.md](goals/security-and-compliance.md) |
 | enterprise-architecture | ArchiMate · capability map · value stream · stakeholder map · business architecture | plantuml infographic | [goals/enterprise-architecture.md](goals/enterprise-architecture.md) |
 | organization-and-roles | org chart · reporting line · workforce · capability coverage · capability maturity · handoffs · responsibilities | infographic vega echarts html-css | [goals/organization-and-roles.md](goals/organization-and-roles.md) |
@@ -94,20 +94,19 @@ examples are authoritative.
 | internal-documents | memo · brief · charter · abstract · policy · quote · principles | html-css infographic | [goals/internal-documents.md](goals/internal-documents.md) |
 | catalogues-and-inventories | catalogue · inventory · entitlements · offerings · standard tools · support tiers | infographic | [goals/catalogues-and-inventories.md](goals/catalogues-and-inventories.md) |
 | customer-and-partner-comms | customer story · case study · sales brief · bulletin · announcement · partner brief · education module | html-css | [goals/customer-and-partner-comms.md](goals/customer-and-partner-comms.md) |
-| theme-and-tone | print · photocopy · handout · low vision · large print · colour-blind · slide · projected · long-form | infographic dot echarts plantuml | [goals/theme-and-tone.md](goals/theme-and-tone.md) |
+| theme-and-tone | print · photocopy · handout · low vision · large print · colour-blind · slide · projected · long-form | infographic echarts plantuml | [goals/theme-and-tone.md](goals/theme-and-tone.md) |
 
 ## Engine cheat sheet
 
 | Engine | Reach for it when | Look elsewhere when |
 |---|---|---|
-| `plantuml` | UML/ArchiMate/BPMN semantics or **brand and device icons** (9,514 stencils) | The layout should be computed (`dot`), or it is a chart |
-| `dot` | A relationship graph should lay itself out: dependencies, causality, hierarchy, state machines | Icons or UML semantics matter |
+| `plantuml` | UML/ArchiMate/BPMN semantics, **brand and device icons** (9,514 stencils), or a relationship graph that should lay itself out | It is a chart |
 | `vega` / `vega-lite` | The data needs work first — join, window, fold, regression, density, facets, small multiples | One polished chart with heavy styling (`echarts`) |
 | `echarts` | Report-grade chart or KPI dashboard: axes, series, thresholds, annotations, gauges | The data must be transformed first |
 | `infographic` | A designed-looking board: roadmap, timeline, checklist, comparison, quadrant, knowledge map | Axes, several series or statistical shapes (`echarts`) |
 | HTML/CSS | Cards, memos, overviews, page-level layouts | Another engine already renders that diagram |
 
-Details, limits and pitfalls: [`plantuml`](engines/plantuml.md) · [`dot`](engines/dot.md) ·
+Details, limits and pitfalls: [`plantuml`](engines/plantuml.md) ·
 [`echarts`](engines/echarts.md) · [`vega`](engines/vega.md) · [`infographic`](engines/infographic.md) ·
 [`html-css`](engines/html-css.md).
 
@@ -118,13 +117,13 @@ These are **not possible**; pick the fallback instead of retrying.
 | Want | Fallback |
 |---|---|
 | 3D / globe / WebGL charts (no `echarts-gl`) | 2D `echarts`; `scatter`/`graph` for shape |
-| Geographic maps (no bundled map data, no GeoJSON offline) | schematic `dot` layout, or an HTML/CSS region diagram |
+| Geographic maps (no bundled map data, no GeoJSON offline) | schematic rectangle layout, or an HTML/CSS region diagram |
 | `dataset.transform` in ECharts (throws `RangeError` in 6.1.0) | sort and derive upstream, then `dataset.source` |
 | Functions in an `echarts` option (parsed as JSON) | template strings (`"{c}%"`), per-item label objects |
 | External data or images (`data.url`, remote URLs) | inline `values`, data URLs |
-| PlantUML WBS / Salt / Timing / ditaa / JSON / YAML / EBNF / nwdiag / SDL / math (parse, draw nothing useful) | `@startmindmap`, `dot` tree, HTML/CSS mockups, or a code fence |
+| PlantUML WBS / Salt / Timing / ditaa / JSON / YAML / EBNF / nwdiag / SDL / math (parse, draw nothing useful) | `@startmindmap`, a boxed rectangle tree, HTML/CSS mockups, or a code fence |
 | Interactive charts (tooltip, zoom, brush) | annotate directly: labels, thresholds, callouts |
-| Icons in `dot` / `vega` / `echarts` | `plantuml` stencils |
+| Icons in `vega` / `echarts` | `plantuml` stencils |
 | Free-form positioning in `infographic` | HTML/CSS for pixel control |
 
 ## Converting a document

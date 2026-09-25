@@ -136,22 +136,6 @@ const ENGINES = {
     variants: (block) => [{ name: 'ramp (band chart, 8 bars)', doc: vgSpec(block), expect: 'palette', body: 'vg' }],
     defaults: [['vega default mark blue #4c78a8', '#4c78a8']],
   },
-  // dot: an attribute block is the block; a node statement is a per-category override. Both wrap
-  // the same way, so the only difference is what the gate asserts (palette vs literal colours).
-  dot: {
-    ext: 'gv',
-    isBlock: (block) => /^\s*(node|edge|graph)\s*\[/m.test(block),
-    // The graph carries a labelled edge so `edge [fontcolor]` has something to colour, and a
-    // fragment is rendered **with the document's own block**, which is how the document tells
-    // readers to use it (`fillcolor` alone does nothing without `style=filled`).
-    variants: (block, isBlock, ctx) => [{
-      name: isBlock ? 'attribute block' : 'node override (with block)',
-      doc: `digraph G {\n${isBlock ? '' : `${ctx ?? ''}\n`}${block}\nA -> B [label="e"]\n}`,
-      expect: isBlock ? 'palette' : 'literals',
-      body: isBlock ? 'attrs' : [...new Set((block.match(/#[0-9a-fA-F]{6}/g) ?? []).map((h) => h.toLowerCase()))].join(' '),
-    }],
-    defaults: [['graphviz default black', 'black']],
-  },
   // html-css has no diagram fence — a card is prose plus markup, so there is nothing to render.
   // Its blocks are checked statically instead: theme literals only, no host-document variable.
   css: {
@@ -164,8 +148,8 @@ const ENGINES = {
 
 /** Fences this gate knows how to render. A *diagram* fence outside this set is invisible to the
  *  gate, so seeing one is a failure — a typo in a fence name must not silently skip a document. */
-const FENCES = ['plantuml', 'infographic', 'echarts', 'vega-lite', 'vega', 'dot', 'css'];
-const DIAGRAM_FENCES = ['plantuml', 'infographic', 'echarts', 'vega', 'vega-lite', 'vl', 'dot', 'dl', 'html', 'html-css'];
+const FENCES = ['plantuml', 'infographic', 'echarts', 'vega-lite', 'vega', 'css'];
+const DIAGRAM_FENCES = ['plantuml', 'infographic', 'echarts', 'vega', 'vega-lite', 'vl', 'dl', 'html', 'html-css'];
 
 function blocks() {
   const out = [];

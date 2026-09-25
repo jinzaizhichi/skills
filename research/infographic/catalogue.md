@@ -252,7 +252,7 @@ data
 1. ✅ 抓 `/learn/template`、`/learn/data`、`/learn/theme`：模板机制、字段细则、预置主题名（`light`/`dark`/`hand-drawn`）已核对。
 2. ⏳ 实测：无效 `icon` 关键字的表现（降级/空白/报错）；`order desc`；`relations` 全部边语法；内联 `design` 入口。
 3. ✅ 场景示例已扩充至 **91**（本轮补 8 个，每个消掉一个此前零示例的 template），全部过 `verify-examples.mjs` 门禁。
-4. ⏳ 边界确认：`relation-*`（infographic 内建 dagre）与 `plantuml` / `dot` 的取舍规则。
+4. ⏳ 边界确认：`relation-*`（infographic 内建 dagre）与 `plantuml` 的取舍规则。
 5. ✅ 版本差异记录：**安装版本实测为 0.2.20**，与站点同版；用 registry 静态解析确认仍是 **113 模板 / 38 个 template 可达结构**，站点 276 张卡片 = 模板 × 主题/调色板组合，**未新增结构**。
 
 ---

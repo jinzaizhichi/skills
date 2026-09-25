@@ -185,25 +185,6 @@ const BLOCKS = (t) => [
     ],
   },
   {
-    engine: 'dot',
-    variant: 'attributes',
-    title: 'attribute block',
-    note: 'Three lines at the top of the `digraph` body, before any node or edge. `style=filled` is not optional — Graphviz ignores `fillcolor` on an unfilled node. No background is set: the graph stays transparent over the document.',
-    lang: 'dot',
-    lines: [
-      `node [style=filled fillcolor="${t('surface-1')}" color="${t('line')}" fontcolor="${t('ink')}"]`,
-      `edge [color="${t('line')}" fontcolor="${t('muted')}"]`,
-    ],
-  },
-  {
-    engine: 'dot',
-    variant: 'override',
-    title: 'per-node override',
-    note: 'Node attributes are defaults, so one extra statement on the node is enough. Use the derived pair — `tint-*` fill with `shade-*` border — except for the fill-only families, which take the neutral `line` border because their shade is too light to read.',
-    lang: 'dot',
-    lines: [`B [fillcolor="${t('tint-cat-4')}" color="${t('shade-cat-4')}" fontcolor="${t('ink')}"]`],
-  },
-  {
     engine: 'html-css',
     variant: 'card',
     title: 'card',
@@ -238,7 +219,7 @@ const BLOCKS = (t) => [
  * A **complete figure** for this theme, not a fragment.
  *
  * Every other section of the file shows a *piece* — the skinparam list you paste, one `"color"`
- * line, a two-line dot block. Those are the deliverable, but they do not answer "what does this
+ * line, a CSS rule. Those are the deliverable, but they do not answer "what does this
  * theme look like", which is the first question anyone asks of a theme. This does: eight adjacent
  * stack segments so the ramp can be judged as a set, a surface panel with its `line` border, `ink`
  * and `muted` text, `line` on the axes, and `target` / `negative` as the dashed thresholds.
@@ -396,7 +377,7 @@ const flag = (uses, f) => (uses.includes(f) ? '✓' : dash);
  * should land on a page. Every theme carries a block for every one of them, so the list is the same in
  * all nine files.
  */
-const ENGINE_REFS = ['plantuml', 'dot', 'echarts', 'vega', 'infographic', 'html-css']
+const ENGINE_REFS = ['plantuml', 'echarts', 'vega', 'infographic', 'html-css']
   .map((e) => `[\`../../engines/${e}.md\`](../../engines/${e}.md)`)
   .join(' · ');
 

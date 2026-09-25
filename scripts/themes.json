@@ -123,6 +123,11 @@
       "sitsOn": "",
       "role": "failures, regressions"
     },
+    "negative-ink": {
+      "max": "tl",
+      "sitsOn": "page",
+      "role": "negative text and deltas — the family shade, granted the text role so a red chip can carry red words"
+    },
     "warning": {
       "max": "tlf",
       "sitsOn": "",
@@ -231,6 +236,10 @@
           "tlf",
           "#ffffff"
         ],
+        "negative-ink": [
+          "#b82029",
+          "tl"
+        ],
         "warning": [
           "#f3a33c",
           "f"
@@ -334,6 +343,10 @@
           "#111827",
           "tlf",
           "#ffffff"
+        ],
+        "negative-ink": [
+          "#0f1522",
+          "tl"
         ],
         "warning": [
           "#a3abb6",
@@ -440,6 +453,10 @@
           "tlf",
           "#ffffff"
         ],
+        "negative-ink": [
+          "#c22121",
+          "tl"
+        ],
         "warning": [
           "#f59e0b",
           "f"
@@ -545,6 +562,10 @@
           "tlf",
           "#ffffff"
         ],
+        "negative-ink": [
+          "#943b37",
+          "tl"
+        ],
         "warning": [
           "#c9a227",
           "f"
@@ -642,6 +663,10 @@
         "negative": [
           "#d55e00",
           "lf"
+        ],
+        "negative-ink": [
+          "#bb5300",
+          "tl"
         ],
         "warning": [
           "#e69f00",
@@ -753,6 +778,10 @@
           "tlf",
           "#ffffff"
         ],
+        "negative-ink": [
+          "#7b0c15",
+          "tl"
+        ],
         "warning": [
           "#7a3400",
           "f"
@@ -863,6 +892,10 @@
           "tlf",
           "#ffffff"
         ],
+        "negative-ink": [
+          "#670c11",
+          "tl"
+        ],
         "warning": [
           "#8e6a00",
           "f"
@@ -966,6 +999,10 @@
           "tlf",
           "#ffffff"
         ],
+        "negative-ink": [
+          "#b90d32",
+          "tl"
+        ],
         "warning": [
           "#8a6a00",
           "f"
@@ -1066,6 +1103,10 @@
         "negative": [
           "#bf616a",
           "lf"
+        ],
+        "negative-ink": [
+          "#a4535b",
+          "tl"
         ],
         "warning": [
           "#7d6a3a",

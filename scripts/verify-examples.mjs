@@ -13,7 +13,7 @@
  *
  * 三条例行门禁：
  *   ① 渲染冒烟：每个示例的代码块必须能被 CLI 渲染成非空 SVG（且不是空图）
- *   ② 语言白名单：示例里不得出现 mermaid / canvas / drawio（不推荐引擎）
+ *   ② 语言白名单：示例里不得出现白名单以外的代码块语言（围栏语言必须可渲染或有明确定义）
  *   ③ 空行规则：裸 HTML 块内不得有空行（CommonMark HTML block 会被空行截断）
  *
  * 可选（--plantuml）：用官方 plantuml CLI 做第二意见校验。
@@ -33,8 +33,6 @@ const DEFAULT_DIRS = ['documd-visuals/examples'];
 const FENCE_TO_EXT = {
   plantuml: '.puml',
   puml: '.puml',
-  dot: '.gv',
-  graphviz: '.gv',
   vega: '.vega',
   'vega-lite': '.vl',
   vegalite: '.vl',
@@ -42,7 +40,8 @@ const FENCE_TO_EXT = {
   infographic: '.infographic',
 };
 
-const BANNED_FENCES = ['mermaid', 'mmd', 'canvas', 'drawio'];
+/** Fences that carry no diagram and are therefore legal but not rendered by this smoke test. */
+const NON_DIAGRAM_FENCES = ['text', 'json', 'md', 'markdown', 'bash', 'sh', 'js', 'ts', 'css'];
 const HTML_FENCE = 'html';
 const MIN_OUTPUT_BYTES = 1000; // 低于此值视为“解析成功但未渲染”
 
@@ -242,9 +241,11 @@ for (const dir of DIRS) {
       entry.lint.push({ level: 'error', msg: `裸 HTML 块内第 ${problem.line} 行出现空行（块起始于第 ${problem.after} 行）` });
     }
 
-    // 规则 ②：禁用语言（error）；```html（warn）
-    if (BANNED_FENCES.some((f) => blocks.some((b) => b.lang === f))) {
-      entry.lint.push({ level: 'error', msg: `出现不推荐引擎代码块（${BANNED_FENCES.join(' / ')}）` });
+    // 规则 ②：语言白名单（error）；```html（warn）—— 不在白名单里的一律拒绝，
+    // 所以不需要单独维护“禁用引擎”名单。
+    for (const b of blocks) {
+      if (FENCE_TO_EXT[b.lang] || NON_DIAGRAM_FENCES.includes(b.lang)) continue;
+      entry.lint.push({ level: 'error', msg: `出现不在白名单内的代码块语言：${b.lang}` });
     }
     if (blocks.some((b) => b.lang === HTML_FENCE)) {
       entry.lint.push({ level: 'warn', msg: '出现 ```html 代码块（卡片/版面应裸 HTML 嵌入；若为“反面例子”可忽略）' });

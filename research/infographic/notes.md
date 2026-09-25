@@ -4,7 +4,7 @@
 
 ## 1. 官方定位
 
-> “Infographic syntax is a **Mermaid-like grammar** for describing templates, designs, data, and themes.
+> “Infographic syntax is a **diagram-as-text grammar** for describing templates, designs, data, and themes.
 > It works well with **AI streaming output** and manual editing alike, and you can render it directly via
 > `Infographic.render(syntax)`.”
 
@@ -78,7 +78,7 @@ theme <theme-name>
 
 规范化：`A ----> B` / `-.-` / `==>` / `--x` / `--o` → 归一为 `--` 或 `->`；`id1(label)` ≡ `id1[label]`；
 `id@{...}` 属性被忽略。
-关系示例支持两种风格：**YAML 风格**（`nodes` + `relations` 列表）与 **Mermaid 风格**（`relations` 里直接写边）。
+关系示例支持两种风格：**YAML 风格**（`nodes` + `relations` 列表）与 **边列表风格**（`relations` 里直接写边）。
 
 ## 4. 本仓库实现要点（`src/renderers/infographic-renderer.ts`）
 
@@ -120,4 +120,4 @@ theme <theme-name>
   宽成本：`hierarchy-tree` ≈365 px/叶、`sequence-interaction` ≈390 px/条、`hierarchy-mindmap` 固定 2086 px。
 - [x] 内联 `design` 入口可用（已过渲染门禁）：`infographic` + `design structure <name>` + `item <item-name>`。
 - [ ] 无效 `icon` 关键字的行为（未专项实测；示例统一用官方文档出现过的 `mdi/*` 形式）。
-- [ ] `relation-*` 与 plantuml / dot 的取舍规则（阶段 2 定稿，写入 `goals/`）。
+- [ ] `relation-*` 与 plantuml 的取舍规则（阶段 2 定稿，写入 `goals/`）。

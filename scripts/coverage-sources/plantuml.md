@@ -21,9 +21,9 @@
 | Gantt | L1 | kept | 111 fixtures (largest corpus) · `planning-and-roadmap/release-gantt-plan.md` |
 | packetdiag | L1 | kept | 16 fixtures · `network-topology/packet-layout-tcp-header.md` |
 | ER / IE (crow's foot) | L1 | kept | 6 fixtures · `data-platform/entity-relationships-crows-foot.md` |
-| **WBS** | **L2** | excluded | `@startwbs` parses, exits 0, emits a 342-byte empty SVG (official baseline 4,535 B). Use `@startmindmap` or a `dot` tree |
+| **WBS** | **L2** | excluded | `@startwbs` parses, exits 0, emits a 342-byte empty SVG (official baseline 4,535 B). Use `@startmindmap` or a boxed rectangle tree |
 | **Salt** | **L2** | excluded | Whole block passed through as text. Use an HTML/CSS mockup card |
-| ditaa · JSON · YAML · EBNF · Regex · nwdiag · SDL · Chronology · Math · Chart diagram · Files tree | L3 | excluded | No parser rule; the block falls through to `verbatim`. Use `dot` for graphs, a code fence for the raw notation |
+| ditaa · JSON · YAML · EBNF · Regex · nwdiag · SDL · Chronology · Math · Chart diagram · Files tree | L3 | excluded | No parser rule; the block falls through to `verbatim`. Use a rectangle graph, or a code fence for the raw notation |
 
 ## Features (4 official + 5 implementation)
 

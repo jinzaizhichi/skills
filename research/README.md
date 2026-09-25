@@ -24,7 +24,7 @@ research/
 └── <engine>/notes.md          # version pins, doc extracts, verification log, open questions
 ```
 
-Engines: `echarts` · `plantuml` · `infographic` · `vega` · `dot` · `html-css`.
+Engines: `echarts` · `plantuml` · `infographic` · `vega` · `html-css`.
 `plantuml/awslib-inventory.md` lists the legacy `awslib/*` macro families (the package recommends the
 `mxgraph.aws4` stencils instead).
 

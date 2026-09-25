@@ -33,7 +33,7 @@ const STRICT = process.argv.includes('--strict');
 const JSON_OUT = process.argv.includes('--json');
 
 /** fenced language → engine name used in the report */
-const ENGINES = { plantuml: 'plantuml', puml: 'plantuml', dot: 'dot', vega: 'vega', 'vega-lite': 'vega-lite', echarts: 'echarts', infographic: 'infographic' };
+const ENGINES = { plantuml: 'plantuml', puml: 'plantuml', vega: 'vega', 'vega-lite': 'vega-lite', echarts: 'echarts', infographic: 'infographic' };
 
 const THEMES = readAllThemes(THEME_DIR);
 const THEME_VALUES = new Map(THEMES.map((t) => [t.id, new Set(t.values)]));

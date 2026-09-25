@@ -538,7 +538,7 @@ package "Domain" as domain { [Entities] }
 | 位置 | 原文 | 实测 |
 |---|---|---|
 | §4.1 / §4.8 / §3 | `skinparam Padding 30` = ✅ both，且「仅 `ArrowThickness` / `Padding` 有效」 | ❌ `Padding` **完全无效**（SVG 与基线一致），只产出 `UNSUPPORTED_SKINPARAM`；`ArrowThickness` 确实有效（edge `strokeWidth=5`）。本引擎**有意不实现** `Padding`（它影响画布外留白，DrawIO→SVG 链路没有干净挂点） |
-| §3 | `skinparam nodesep 200` 与 `DefaultFontSize` 归入「全部非颜色参数不生效」 | 两者都已生效：`nodesep` 作用于**同层间距**（`class A/B/C` + `A-->B` + `A-->C` 时画布宽 192 → **366 px**，ELK/DOT 一致）；`DefaultFontSize` 使整主题按新字号缩放 |
+| §3 | `skinparam nodesep 200` 与 `DefaultFontSize` 归入「全部非颜色参数不生效」 | 两者都已生效：`nodesep` 作用于**同层间距**（`class A/B/C` + `A-->B` + `A-->C` 时画布宽 192 → **366 px**，两种布局引擎一致）；`DefaultFontSize` 使整主题按新字号缩放 |
 
 ### 10.5 新能力：诊断通道（可直接用于 block 校验）
 

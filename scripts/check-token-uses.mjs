@@ -7,14 +7,13 @@
  *
  * The contract's central table is `may be used as` (text · line · fill). Nothing checked it: the
  * usage gate only asks whether a colour belongs to *some* theme, so a **text-only** token used as a
- * line passed. Measured, before this gate existed: 5 dot examples set `edge [color="#4b5563", …]`,
+ * line passed. Measured, before this gate existed: 5 graph examples set `edge [color="#4b5563", …]`,
  * and `#4b5563` is `ink-soft` (text on a page) — it silently overrode the block's own edge colour.
  *
  * **How a role is decided.** Only syntax that *names* the role is classified:
  *
  *   plantuml      `skinparam <X>BackgroundColor` → fill · `<X>BorderColor` / `ArrowColor` → line ·
  *                 `<X>FontColor` / `DefaultFontColor` → text
- *   dot           `fillcolor` / `BGCOLOR` → fill · `color` → line · `fontcolor` → text
  *   infographic   `colorPrimary` and `palette` entries → fill
  *   echarts/vega* the JSON key path, via `JSON_ROLE_RULES` below
  *   css           `background*` → fill · `border*` / `outline` → line · `color` → text
@@ -46,7 +45,6 @@ const NEUTRALS = new Set(['#ffffff', '#fff', '#000000', '#000']);
 const FENCES = {
   plantuml: 'plantuml',
   puml: 'plantuml',
-  dot: 'dot',
   echarts: 'echarts',
   'vega-lite': 'vega-lite',
   vega: 'vega',
@@ -67,6 +65,10 @@ const FENCES = {
  * `color.condition.value` · `{layer,}mark.color` · `mark.line.color` · `vconcat.mark.color`.
  */
 const JSON_ROLE_RULES = [
+  // A **text mark** paints ink, not a shape fill: `marks.<text>.encode.enter.fill.value`,
+  // `mark.<text>.color`. Same property name, opposite role — a surface token here is an invisible
+  // label, which is exactly the failure this gate exists to catch.
+  [/(^|\.)<text>\..*?(fill|color)(\.value)?$/, 'text'],
   // A line is the more specific reading, so those rules come first: `series.itemStyle.borderColor`
   // also ends in `Color`, and `mark.line.color` also contains `mark`.
   [/(^|\.)(borderColor0?|lineStyle\.color|stroke\.value)$/, 'line'],
@@ -78,10 +80,21 @@ const JSON_ROLE_RULES = [
   [/(^|\.)range(\.category)?$/, 'fill'],
 ];
 
+/**
+ * CSS `fill:` paints ink when the selector's class is used on an SVG `<text>` element in the same
+ * block, and a shape fill otherwise. Read from the markup rather than assumed: `fill` is the one
+ * property whose role depends on the element it lands on.
+ */
+function cssFillPaintsText(body, line) {
+  const cls = line.slice(0, line.indexOf('{')).match(/\.([a-z0-9_-]+)/i)?.[1];
+  return cls ? new RegExp(`<text[^>]*class="[^"]*\\b${cls}\\b`, 'i').test(body) : false;
+}
+
 /** CSS property → role. `background`/`border` prefixes are matched, so shorthands are covered. */
 function cssRole(prop) {
   const p = prop.toLowerCase();
-  if (p === 'color' || p === 'fill') return p === 'fill' ? 'fill' : 'text';
+  if (p === 'color') return 'text';
+  if (p === 'fill') return 'fill';
   if (p.startsWith('background')) return 'fill';
   if (p.startsWith('border') || p.startsWith('outline') || p === 'stroke' || p === 'box-shadow') return 'line';
   return null;
@@ -93,15 +106,6 @@ function plantumlRole(key) {
   if (k.endsWith('backgroundcolor')) return 'fill';
   if (k.endsWith('bordercolor') || k.endsWith('arrowcolor') || k.endsWith('linecolor')) return 'line';
   if (k.endsWith('fontcolor')) return 'text';
-  return null;
-}
-
-/** dot attribute → role. */
-function dotRole(key) {
-  const k = key.toLowerCase();
-  if (k === 'fillcolor' || k === 'bgcolor') return 'fill';
-  if (k === 'color') return 'line';
-  if (k === 'fontcolor') return 'text';
   return null;
 }
 
@@ -125,6 +129,18 @@ function occurrences(engine, body) {
       }
       for (const m of line.matchAll(/;\s*text\s*:\s*([0-9a-fA-F]{6})/gi)) push(`#${m[1]}`, 'text', line.trim());
       for (const m of line.matchAll(/<<\s*(#[0-9a-fA-F]{6})\s*>>/g)) push(m[1], 'fill', line.trim());
+      // An element *declaration* suffix — `package "Ops" as ops #f8fafc {` — names a fill, with or
+      // without the `;line:` half the rule above already classified.
+      for (const m of line.matchAll(/^\s*(?:rectangle|class|package|component|node|cloud|database|folder|usecase|actor|state|artifact|entity|object|interface|enum)\b[^#]*#([0-9a-fA-F]{6})/gi)) {
+        const hex = `#${m[1]}`.toLowerCase();
+        if (!out.some((o) => o.hex === hex && o.where === line.trim())) push(hex, 'fill', line.trim());
+      }
+      // An arrow colour — `A -[#hex]-> B`, with optional style flags (`-[#hex,dashed]->`) — names a
+      // line. The `#fill;line:border` form used on nodes does not apply to arrows.
+      for (const m of line.matchAll(/\[#([0-9a-fA-F]{6})(?:\s*,\s*[a-z]+)*\]/gi)) {
+        const hex = `#${m[1]}`.toLowerCase();
+        if (!out.some((o) => o.hex === hex && o.where === line.trim())) push(hex, 'line', line.trim());
+      }
     }
     // Anything left over: a hex on a line no rule above recognised.
     for (const line of body.split('\n')) {
@@ -135,17 +151,6 @@ function occurrences(engine, body) {
     return out;
   }
 
-  if (engine === 'dot') {
-    for (const line of body.split('\n')) {
-      let matched = false;
-      for (const m of line.matchAll(/([A-Za-z]+)\s*=\s*"?(#[0-9a-fA-F]{6})"?/g)) {
-        push(m[2], dotRole(m[1]), line.trim());
-        matched = true;
-      }
-      if (!matched) for (const m of line.matchAll(HEX)) push(m[0], null, line.trim());
-    }
-    return out;
-  }
 
   if (engine === 'infographic') {
     for (const line of body.split('\n')) {
@@ -165,7 +170,19 @@ function occurrences(engine, body) {
     for (const line of body.split('\n')) {
       let matched = false;
       for (const m of line.matchAll(/([a-z-]+)\s*:\s*[^;{}]*?(#[0-9a-fA-F]{6})/gi)) {
-        push(m[2], cssRole(m[1]), line.trim());
+        const prop = m[1].toLowerCase();
+        const role = prop === 'fill' && cssFillPaintsText(body, line) ? 'text' : cssRole(prop);
+        push(m[2], role, line.trim());
+        matched = true;
+      }
+      // Inline SVG presentation attributes — `stroke="#hex"`, `fill="#hex"` — name their role the
+      // same way the CSS properties do; `fill="none"` carries no colour and is skipped.
+      for (const m of line.matchAll(/\bstroke="(#[0-9a-fA-F]{6})"/gi)) {
+        push(m[1], 'line', line.trim());
+        matched = true;
+      }
+      for (const m of line.matchAll(/\bfill="(#[0-9a-fA-F]{6})"/gi)) {
+        push(m[1], /<text\b/i.test(line) ? 'text' : 'fill', line.trim());
         matched = true;
       }
       if (!matched) for (const m of line.matchAll(HEX)) push(m[0], null, line.trim());
@@ -199,11 +216,19 @@ function occurrences(engine, body) {
       return;
     }
     if (node && typeof node === 'object') {
+      // A **text mark** is the one case where a colour's role is not what its property name says: its
+      // `fill` / `color` is ink, not a shape fill. Carry that into the path as `<text>` so a rule can
+      // see it — every other mark type keeps the property's own reading, and its path unchanged.
+      // Vega marks have `encode`/`from`; a Vega-Lite `mark` object is the value of a `mark` key.
+      const isTextMark =
+        node.type === 'text' && (node.encode || node.from || at.at(-1) === 'mark');
+      if (isTextMark) at.push('<text>');
       for (const [k, v] of Object.entries(node)) {
         at.push(k);
         walk(v);
         at.pop();
       }
+      if (isTextMark) at.pop();
     }
   };
   walk(spec);
